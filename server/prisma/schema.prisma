@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id                 String        @id @unique @default(uuid())
+  name               String
+  username           String        @unique
+  email              String        @unique
+  password           String
+  friendsAsRequester Friendship[]  @relation("Requester")
+  friendsAsTarget    Friendship[]  @relation("Target")
+  credit             Loan[]        @relation("Creditor") 
+  debt               Loan[]        @relation("Debtor")  
+  createdAt          DateTime      @default(now())
+
+  @@map(name: "users")
+}
+
+model Loan {
+  id         String      @id @unique @default(uuid())
+  creditor   User        @relation("Creditor", fields: [creditorId], references: [id])
+  creditorId String
+  debtor     User        @relation("Debtor", fields: [debtorId], references: [id])
+  debtorId   String
+  item       String
+  amount     Float
+  settled    Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  settledAt  DateTime?
+
+  @@map(name: "loans")  
+}
+
+model Friendship {
+  id           String      @id @unique @default(uuid())
+  requester    User        @relation("Requester", fields: [requesterId], references: [id])
+  requesterId  String      
+  target       User        @relation("Target", fields: [targetId], references: [id])
+  targetId     String
+  status       String
+  createdAt    DateTime    @default(now())
+
+  @@map(name: "friendships")  
+}

@@ -1,0 +1,9 @@
+password hashing
+
+
+ERRORS:
+avoid friend request duplication 
+wrong credentials
+friend request user doesn't exist
+user already exists at signup
+Add Loan check?
