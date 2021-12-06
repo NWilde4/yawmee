@@ -3,7 +3,6 @@ import { Link as RouterLink } from "react-router-dom"
 import { 
   Box,
   Flex,
-  Heading,
   Image,
   Spacer,
   HStack,

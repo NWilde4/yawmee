@@ -8,6 +8,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  useToast,
   VStack,
 } from "@chakra-ui/react"
 
@@ -20,7 +21,21 @@ const EntryForm = ({ setToken }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [logInUser, result] = useMutation(LOGIN_USER)
+  const toast = useToast()
+
+  const [logInUser, result] = useMutation(LOGIN_USER, {
+    onError: (error) => {
+      console.log(error)
+      toast({
+        title: 'Error',
+        description: error.graphQLErrors[0].message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
+    }
+  })
+
   const [createUser] = useMutation(CREATE_USER)
 
   useEffect(() => {

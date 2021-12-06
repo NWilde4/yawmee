@@ -79,6 +79,9 @@ export const CREATE_LOAN = gql`
       amount: $amount
     ) {
       item
+      debtor {
+        name
+      }
     }
   }
 `

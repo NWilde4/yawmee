@@ -7,7 +7,7 @@ const faqList = [
   {
     id: 2,
     question: "How do I settle my debts?",
-    answer: "However you  want. This app helps you track your loans, that's all."
+    answer: "However you  want. This app helps you track your loans and mark when they're settled, that's all."
   },
   {
     id: 3,
@@ -17,7 +17,7 @@ const faqList = [
   {
     id: 4,
     question: "Can I remove friends?",
-    answer: "Yes, but if you become friends again, unsettled loans will reappear."
+    answer: "Yes, you can. All loans between the two of you will also be removed. So be wise about it."
   },
   {
     id: 5,

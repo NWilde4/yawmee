@@ -3,20 +3,12 @@ import {
   Box,
   Center,
   Flex,
-  Heading,
   Image,
   Text,
   VStack
 } from "@chakra-ui/react"
 
 import EntryForm from './EntryForm'
-
-const Description = () => {
-  return (
-    <Box bg="blue.900">
-    </Box>
-    )
-}
 
 const Landing = ({ setToken }) => {
 

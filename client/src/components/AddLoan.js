@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import {
   Button,
@@ -26,36 +26,39 @@ const AddLoan = () => {
   const [item, setItem] = useState('')
   const toast = useToast()
 
-  const result = useQuery(GET_FRIENDS)
-  const [createLoan] = useMutation(CREATE_LOAN, {
+  const friendsResult = useQuery(GET_FRIENDS)
+  const [createLoan, loanResult] = useMutation(CREATE_LOAN, {
     refetchQueries: [ {query: GET_ALL_BALANCES}, {query: GET_TOTAL_BALANCE} ]
   })
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    if (loanResult.data) {
+      toast({
+        title: "Success",
+        description: `Loan with ${loanResult.data.addLoan.debtor.name} has been added.`,
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      })      
+    }
+  }, [loanResult.data, toast])
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
     let variables = {
       counterparty,
       amount: Number(amount),
       item
     }
+    
     createLoan({ variables })
-
-    const counterpartyName = result.data.getFriends.find(friendObject=>friendObject.friend.id === counterparty).friend.name
-
-    toast({
-      title: "Success",
-      description: `Loan with ${counterpartyName} has been added.`,
-      status: "success",
-      duration: 9000,
-      isClosable: true,
-    })
     
     setAmount('')
     setItem('')
 
   }
 
-  if (result.loading) {
+  if (friendsResult.loading) {
     return <LoadingSpinner />
   }
 
@@ -70,7 +73,7 @@ const AddLoan = () => {
             <FormLabel>Your friend</FormLabel>
             <Select required defaultValue={counterparty} onChange={({ target }) => setCounterparty(target.value)}>
               <option value="default" disabled hidden>Select Friend</option>
-              {result.data.getFriends
+              {friendsResult.data.getFriends
                 .filter(friendObject => friendObject.status === 'active')
                 .map(friendObject => {
                 return(<option key={friendObject.friend.id} value={friendObject.friend.id}>{friendObject.friend.name}</option>)

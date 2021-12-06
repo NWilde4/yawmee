@@ -1,9 +1,11 @@
 password hashing
+token expiry
+toasts
+clear history on logout
+remove loans
 
 
 ERRORS:
-avoid friend request duplication 
-wrong credentials
-friend request user doesn't exist
 user already exists at signup
 Add Loan check?
+

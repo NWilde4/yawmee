@@ -239,6 +239,7 @@ const resolvers = {
           password: args.password,
         },
       })
+
       return newUser
     },
     login: async (root, args) => {
@@ -250,7 +251,7 @@ const resolvers = {
       })
 
       if (!fetchedUser) {
-        throw new UserInputError("wrong credentials")
+        throw new UserInputError("Wrong credentials.")
       }
 
       const userForToken = {
@@ -268,6 +269,9 @@ const resolvers = {
           item: args.item,
           amount: args.amount,
         },
+        include: {
+          debtor: true
+        }
       })
       return newLoan
     },
@@ -290,7 +294,7 @@ const resolvers = {
       return "whatever"
     },
     addFriend: async (root, args, context) => {
-      const { id: targetId } = await prisma.user.findUnique({
+      const targetedFriend = await prisma.user.findUnique({
         where: {
           username: args.target
         },
@@ -299,6 +303,31 @@ const resolvers = {
         }
       })
 
+      if (!targetedFriend) {
+        throw new UserInputError(`User ${args.target} doesn't exist.`)
+      }
+
+      const { id: targetId } = targetedFriend
+
+      const existingFriendship = await prisma.friendship.findFirst({
+        where: {
+          OR: [
+            {
+              requesterId: context.currentUser.id,
+              targetId: targetId, 
+            },
+            {
+              requesterId: targetId,
+              targetId: context.currentUser.id
+            }
+          ]
+        },
+      })
+
+      if (existingFriendship) {
+        throw new UserInputError("You can't become friends again.")
+      } 
+
       const newFriendship = await prisma.friendship.create({
         data: {
           requesterId: context.currentUser.id,
@@ -306,6 +335,7 @@ const resolvers = {
           status: 'pending'
         },
       })
+
       return newFriendship
     },
     updateFriendship: async (root, args) => {

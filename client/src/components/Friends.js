@@ -12,7 +12,8 @@ import {
   Input,
   Spacer,
   Text,
-  VStack
+  VStack,
+  useToast,
 } from "@chakra-ui/react"
 import { DeleteIcon, CloseIcon, CheckIcon, EmailIcon } from '@chakra-ui/icons'
 
@@ -29,17 +30,26 @@ import {
 const Friends = () => {
   const result = useQuery(GET_FRIENDS)
   const [createFriend] = useMutation(CREATE_FRIEND, {
-    refetchQueries: [ {query: GET_FRIENDS} ]
+    refetchQueries: [ {query: GET_FRIENDS} ],
+    onError: (error) => {
+      toast({
+        title: 'Error',
+        description: error.graphQLErrors[0].message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
+    }
   })
   const [updateFriendship] = useMutation(UPDATE_FRIENDSHIP, {
     refetchQueries: [ {query: GET_FRIENDS}, {query: GET_ALL_BALANCES}, {query: GET_TOTAL_BALANCE} ]
   })
 
   const [friendRequestName, setFriendRequestName] = useState('')
+  const toast = useToast()
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(friendRequestName)
     createFriend({ variables: { 
       target: friendRequestName
      } })
