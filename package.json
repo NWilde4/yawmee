@@ -7,8 +7,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "deploy": "cd ./client && npm run build && cd ../ && node index.js",
-    "build:react": "cd ./client && npm run build",
-    "start:react": "cd ./client && npm start",
+    "build:react": "cd ./client && react-scripts build",
+    "start:react": "cd ./client && react-scripts start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
