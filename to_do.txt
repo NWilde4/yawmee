@@ -12,3 +12,7 @@ routes refresh get error
 ERRORS:
 Add Loan check?
 
+
+
+
+SET HEROKU LÓFASZOK
