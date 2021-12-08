@@ -36,7 +36,18 @@ const EntryForm = ({ setToken }) => {
     }
   })
 
-  const [createUser] = useMutation(CREATE_USER)
+  const [createUser] = useMutation(CREATE_USER, {
+    onError: (error) => {
+      console.log(error)
+      toast({
+        title: 'Error',
+        description: error.graphQLErrors[0].message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
+    }    
+  })
 
   useEffect(() => {
     if (result.data) {
@@ -60,16 +71,21 @@ const EntryForm = ({ setToken }) => {
     }
     if (entryForm === 'logIn') {
       logInUser({ variables })
+      setUsername('')
+      setPassword('')
     } else {
       await createUser({ variables })
-      logInUser({ variables })
+      toast({
+        title: 'Success',
+        description: `Account created for ${name} (${username})`,
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
+      setEntryForm('logIn')
     }
-
     setName('')
-    setUsername('')
     setEmail('')
-    setPassword('')
-
   }
 
   return (

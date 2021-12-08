@@ -21,16 +21,21 @@ const faqList = [
   },
   {
     id: 5,
+    question: "Can I remove loans?",
+    answer: "Not yet, but soon."
+  },
+  {
+    id: 6,
     question: "Can I settle part of my debts?",
     answer: "No, you can only settle all debts. This app is for micro-loans not long-term debts. If you can't settle them all at once, you probably shouldn't have asked for a loan in the first place."
   },
   {
-    id: 6,
+    id: 7,
     question: "Can I block people?",
     answer: "Nice try, but no. If someone could add you, you probably let them know your username, probably because you have loans between the two of you. So don't ghost them."
   },  
   {
-    id: 7,
+    id: 8,
     question: "Can I add different currencies?",
     answer: "Valid question. Not at the moment, but we plan to add this feature in the future."
   },

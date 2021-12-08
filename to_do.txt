@@ -1,11 +1,8 @@
-password hashing
 token expiry
-toasts
 clear history on logout
 remove loans
-
+reg emails
 
 ERRORS:
-user already exists at signup
 Add Loan check?
 

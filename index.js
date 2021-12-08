@@ -1,9 +1,11 @@
-const { ApolloServer, gql, UserInputError } = require('apollo-server')
+const express = require('express')
+const { ApolloServer, gql, UserInputError } = require('apollo-server-express')
+const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
+const http = require('http')
+const bcrypt = require('bcrypt')
 const { v4: uuid } = require('uuid')
 const { prisma } = require("./src/database.js");
 const jwt = require('jsonwebtoken')
-
-const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
 const typeDefs = gql`
 
@@ -231,27 +233,57 @@ const resolvers = {
 
   Mutation: {
     addUser: async (root, args) => {
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          OR: [
+            {
+              username: args.username
+            },
+            {
+              email: args.email
+            }
+          ]
+        }
+      })
+
+      if (existingUser && existingUser.username === args.username) {
+        throw new UserInputError('This username already exists.')
+      }
+
+      if (existingUser && existingUser.email === args.email) {
+        throw new UserInputError('This email address has already been registered.')
+      }
+
+      const saltRounds = 10
+
+      const passwordHash = await bcrypt.hash(args.password, saltRounds)
+
       const newUser = await prisma.user.create({
         data: {
           name: args.name,
           username: args.username,
           email: args.email,
-          password: args.password,
+          password: passwordHash,
         },
       })
 
       return newUser
     },
     login: async (root, args) => {
-      const fetchedUser = await prisma.user.findFirst({
+      const fetchedUser = await prisma.user.findUnique({
         where: {
           username: args.username,
-          password: args.password
         },
       })
 
       if (!fetchedUser) {
-        throw new UserInputError("Wrong credentials.")
+        throw new UserInputError("Wrong username.")
+      }
+
+      const passwordCorrect = await bcrypt.compare(args.password, fetchedUser.password)
+
+      if (!passwordCorrect) {
+        throw new UserInputError("Wrong password.")
       }
 
       const userForToken = {
@@ -382,23 +414,34 @@ const resolvers = {
   }
 }
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: async ({ req }) => {
-    const auth = req ? req.headers.authorization : null
-    if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(auth.substring(7), process.env.SECRET_KEY)
-      const currentUser = await prisma.user.findUnique({
-        where: {
-          id: decodedToken.id
-        }
-      })
-      return { currentUser }
-    }
-  }
-})
+const startApolloServer = async (typeDefs, resolvers) => {
+  const app = express()
+  app.use(express.static('client/build'))
+  const httpServer = http.createServer(app)
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context: async ({ req }) => {
+      const auth = req ? req.headers.authorization : null
+      if (auth && auth.toLowerCase().startsWith('bearer ')) {
+        const decodedToken = jwt.verify(auth.substring(7), process.env.SECRET_KEY)
+        const currentUser = await prisma.user.findUnique({
+          where: {
+            id: decodedToken.id
+          }
+        })
+        return { currentUser }
+      }
+    },
+  })
 
-server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
+  const PORT = process.env.PORT || 4000
+
+  await server.start()
+  server.applyMiddleware({ app })
+  await new Promise(resolve => httpServer.listen(PORT, resolve))
+  console.log(`🚀 Server ready on port ${PORT}${server.graphqlPath}`)
+}
+
+startApolloServer(typeDefs, resolvers)
