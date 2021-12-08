@@ -19,7 +19,7 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
-const uri = process.env.PORT || "http://localhost:4000"
+const uri = "https://yawmee.herokuapp.com" || "http://localhost:4000"
 
 const httpLink = new HttpLink({ uri: `${uri}/graphql`})
 
