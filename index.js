@@ -440,7 +440,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
 
   await server.start()
   server.applyMiddleware({ app })
-  await new Promise(resolve => httpServer.listen(PORT, resolve))
+  await new Promise(resolve => httpServer.listen({ port: PORT }, resolve))
   console.log(`🚀 Server ready on port ${PORT}${server.graphqlPath}`)
 }
 
