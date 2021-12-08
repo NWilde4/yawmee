@@ -1,0 +1,29 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: npm install
+        run: npm install
+      - name: build
+        run: npm run build:react
+      - name: deploy
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "yawmee"
+          heroku_email: "wilde.norman@yahoo.com"
+          # healthcheck: "https://yawmee.herokuapp.com/health"
+          # checkstring: "ok"
+          # rollbackonhealthcheckfailed: true
+

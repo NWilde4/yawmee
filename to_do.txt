@@ -5,8 +5,8 @@ reg emails
 CI/CD
 build mappát kivenni gitignore-ból
 ne hardcoded legyen a grapqhl client uri
-
-
+"nem biztonságos"
+health check
 
 
 
