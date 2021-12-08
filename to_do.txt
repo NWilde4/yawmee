@@ -2,13 +2,11 @@ token expiry
 clear history on logout
 remove loans
 reg emails
-CI/CD
-build mappát kivenni gitignore-ból
 ne hardcoded legyen a grapqhl client uri
 "nem biztonságos"
 health check
 friends toast
-
+routes refresh get error
 
 
 ERRORS:

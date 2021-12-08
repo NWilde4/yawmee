@@ -417,9 +417,6 @@ const resolvers = {
 const startApolloServer = async (typeDefs, resolvers) => {
   const app = express()
   app.use(express.static('client/build'))
-  app.get('/*', (req, res) => {
-    res.sendFile('client/build/index.html')
-  })
   const httpServer = http.createServer(app)
   const server = new ApolloServer({
     typeDefs,
