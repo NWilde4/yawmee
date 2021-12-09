@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const { v4: uuid } = require('uuid')
 const { prisma } = require("./src/database.js");
 const jwt = require('jsonwebtoken')
+const path = require('path')
 
 const typeDefs = gql`
 
@@ -418,7 +419,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
   const app = express()
   app.use(express.static('client/build'))
   app.get('/*', (req, res) => {
-    res.sendFile('client/build/index.html')
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'))
   })
   const httpServer = http.createServer(app)
   const server = new ApolloServer({
