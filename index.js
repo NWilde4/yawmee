@@ -92,6 +92,10 @@ const typeDefs = gql`
       amount: Float!
     ): Loan
 
+    removeLoan(
+      loanId: String!
+    ): String
+
     settleBalance(
       counterparty: String!
     ): String
@@ -308,6 +312,14 @@ const resolvers = {
       })
       return newLoan
     },
+    removeLoan: async (root, args) => {
+      const deleteLoan = await prisma.loan.delete({
+        where: {
+          id: args.loanId,
+        }
+      })
+      return "Loan removed"
+    },
     settleBalance: async (root, args, context) => {
       const deleteLoans = await prisma.loan.deleteMany({
         where: {
@@ -324,7 +336,7 @@ const resolvers = {
         },
       })
 
-      return "whatever"
+      return "Balance settled"
     },
     addFriend: async (root, args, context) => {
       const targetedFriend = await prisma.user.findUnique({

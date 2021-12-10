@@ -12,22 +12,28 @@ import {
   Button,
   Center,
   Divider,
+  Flex,
   Heading,
   HStack,
+  IconButton,
+  Spacer,
   StackDivider,
   Text,
   useToast,
   VStack
 } from "@chakra-ui/react"
-import { AddIcon, MinusIcon, ArrowRightIcon } from '@chakra-ui/icons'
+import { AddIcon, MinusIcon, ArrowRightIcon, DeleteIcon } from '@chakra-ui/icons'
 
 import LoadingSpinner from './LoadingSpinner'
-import { GET_ALL_BALANCES, SETTLE_BALANCE, GET_TOTAL_BALANCE } from '../queries'
+import { GET_ALL_BALANCES, SETTLE_BALANCE, GET_TOTAL_BALANCE, REMOVE_LOAN } from '../queries'
 
 const Balances = () => {
   const balancesResult = useQuery(GET_ALL_BALANCES)
   const [settleBalance] = useMutation(SETTLE_BALANCE, {
     refetchQueries: [ {query: GET_ALL_BALANCES}, {query: GET_TOTAL_BALANCE} ]
+  })
+  const [removeLoan] = useMutation(REMOVE_LOAN, {
+    refetchQueries: [ {query: GET_ALL_BALANCES}, {query: GET_TOTAL_BALANCE} ]    
   })
 
   const toast = useToast()
@@ -42,8 +48,12 @@ const Balances = () => {
       duration: 9000,
       isClosable: true,
     })
-
   }
+
+  const handleLoanRemoval = (id) => {
+    removeLoan({ variables: {loanId: id}})
+  }
+
 
   if (balancesResult.loading) {
     return <LoadingSpinner />
@@ -80,6 +90,7 @@ const Balances = () => {
                 >
                 {friend.loans.map(loan => {
                   return(
+                    <Flex>
                       <HStack key={loan.id}>
                         {loan.amount > 0 ? <AddIcon color="green"/> : <MinusIcon color="red.400" />}
                         <Box>
@@ -88,6 +99,11 @@ const Balances = () => {
                           <Badge colorScheme={loan.amount > 0 ? "green" : "red"}>{new Intl.NumberFormat('hu-HU').format(loan.amount)} HUF</Badge>
                         </Box>
                       </HStack>
+                      <Spacer />
+                      {loan.amount > 0 &&
+                      <IconButton icon={<DeleteIcon />} onClick={() => handleLoanRemoval(loan.id)}/>
+                      }
+                    </Flex>
                   )
                 })}
                 </VStack>

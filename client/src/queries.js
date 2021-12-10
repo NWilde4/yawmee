@@ -114,3 +114,11 @@ export const GET_ALL_BALANCES = gql`
     }
   }
 `
+
+export const REMOVE_LOAN = gql`
+  mutation deleteLoan($loanId: String!) {
+    removeLoan(
+      loanId: $loanId,
+    )
+  }
+`
