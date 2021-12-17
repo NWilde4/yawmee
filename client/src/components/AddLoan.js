@@ -71,7 +71,7 @@ const AddLoan = () => {
         <VStack align="stretch">
           <FormControl>
             <FormLabel>Your friend</FormLabel>
-            <Select required defaultValue={counterparty} onChange={({ target }) => setCounterparty(target.value)}>
+            <Select required defaultValue={counterparty} onChange={({ target }) => {setCounterparty(target.value)}}>
               <option value="default" disabled hidden>Select Friend</option>
               {friendsResult.data.getFriends
                 .filter(friendObject => friendObject.status === 'active')
@@ -86,7 +86,7 @@ const AddLoan = () => {
               value={amount}
             >
               <NumberInputField 
-                onChange={({ target }) => setAmount(target.value)}
+                onChange={({ target }) => {setAmount(target.value)}}
                 required
                 placeholder="HUF"
               />
@@ -99,7 +99,7 @@ const AddLoan = () => {
           <FormControl>
             <FormLabel>for</FormLabel>
             <Input 
-              onChange={({ target }) => setItem(target.value)}
+              onChange={({ target }) => {setItem(target.value)}}
               required
               placeholder="Item Name"
               value={item}

@@ -101,7 +101,7 @@ const Balances = () => {
                       </HStack>
                       <Spacer />
                       {loan.amount > 0 &&
-                      <IconButton icon={<DeleteIcon />} onClick={() => handleLoanRemoval(loan.id)}/>
+                      <IconButton icon={<DeleteIcon />} onClick={() => {handleLoanRemoval(loan.id)}}/>
                       }
                     </Flex>
                   )
@@ -118,7 +118,7 @@ const Balances = () => {
                         <Text my={2} color="red.400" fontSize="xl">Once the loan is settled, you can remove all loans by clicking the button below.</Text>
                         <Button 
                           colorScheme="blue" 
-                          onClick={() => handleClick(friend)}
+                          onClick={() => {handleClick(friend)}}
                         >
                           Mark Loans Settled
                         </Button>

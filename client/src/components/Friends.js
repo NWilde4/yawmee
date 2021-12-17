@@ -87,7 +87,7 @@ const Friends = () => {
                           <Text>{friendObject.friend.email}</Text>
                         </Box>
                         <Spacer />
-                        <IconButton icon={<DeleteIcon />} onClick={() => updateFriend(friendObject.id, 'remove')} />
+                        <IconButton icon={<DeleteIcon />} onClick={() => {updateFriend(friendObject.id, 'remove')}} />
                       </Flex>
                       <Divider />
                     </Box>
@@ -114,10 +114,10 @@ const Friends = () => {
                           <Spacer />
                           {friendObject.isTarget
                             ? <ButtonGroup isAttached>
-                                <IconButton icon={<CheckIcon />} mr="-px" onClick={() => updateFriend(friendObject.id, 'accept')} />
-                                <IconButton icon={<CloseIcon />} onClick={() => updateFriend(friendObject.id, 'remove')} />
+                                <IconButton icon={<CheckIcon />} mr="-px" onClick={() => {updateFriend(friendObject.id, 'accept')}} />
+                                <IconButton icon={<CloseIcon />} onClick={() => {updateFriend(friendObject.id, 'remove')}} />
                               </ButtonGroup>
-                            : <IconButton icon={<DeleteIcon />} onClick={() => updateFriend(friendObject.id, 'remove')} />
+                            : <IconButton icon={<DeleteIcon />} onClick={() => {updateFriend(friendObject.id, 'remove')}} />
                           }
                         </Flex>
                         <Divider />
@@ -137,7 +137,7 @@ const Friends = () => {
                   type="text" 
                   value={friendRequestName} 
                   placeholder="Friend's Username"
-                  onChange={({ target }) => setFriendRequestName(target.value)} 
+                  onChange={({ target }) => {setFriendRequestName(target.value)}} 
                 />
               </FormControl>
               <IconButton icon={<EmailIcon />} type='submit' />

@@ -108,22 +108,22 @@ const EntryForm = ({ setToken }) => {
             {entryForm === 'signUp' &&
             <FormControl>
               <FormLabel>Name</FormLabel>
-              <Input type='text' value={name} required onChange={({ target }) => setName(target.value)}/>
+              <Input type='text' value={name} required onChange={({ target }) => {setName(target.value)}}/>
             </FormControl>
             }
             {entryForm === 'signUp' &&
             <FormControl>
               <FormLabel>Email</FormLabel>
-              <Input type='email' value={email} required onChange={({ target }) => setEmail(target.value)}/>
+              <Input type='email' value={email} required onChange={({ target }) => {setEmail(target.value)}}/>
             </FormControl>
             }
             <FormControl>
               <FormLabel>Username</FormLabel>
-              <Input type='text' value={username} required onChange={({ target }) => setUsername(target.value)}/>
+              <Input type='text' value={username} required onChange={({ target }) => {setUsername(target.value)}}/>
             </FormControl>
             <FormControl>
               <FormLabel>Password</FormLabel>
-              <Input type='password' value={password} required onChange={({ target }) => setPassword(target.value)}/>
+              <Input type='password' value={password} required onChange={({ target }) => {setPassword(target.value)}}/>
             </FormControl>
             <Button type='submit' isFullWidth colorScheme="red" bg="red.400">{(entryForm === 'logIn') ? "Submit" : "Create Account"}</Button>
           </VStack>
