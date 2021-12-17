@@ -1,20 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
 import { ChakraProvider } from "@chakra-ui/react"
-import theme from './theme'
 import '@fontsource/m-plus-2'
 import { 
   ApolloClient, ApolloProvider, HttpLink, InMemoryCache 
 } from '@apollo/client' 
 import { setContext } from '@apollo/client/link/context'
 
+import App from './App'
+import theme from './theme'
+
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('user-token')
   return {
     headers: {
       ...headers,
-      authorization: token ? `bearer ${token}` : null,
+      authorization: token ? `Bearer ${token}` : null,
     }
   }
 })
