@@ -12,16 +12,16 @@ import Main from './components/Main'
 import Footer from './components/Footer'
 
 const App = () => {
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     const token = localStorage.getItem('user-token')
-    if (token) {
+    if (token?.trim()?.length) {
       setToken(token)
     }
   }, [])
 
-  if (!token) {
+  if (!token?.trim()?.length) {
     return(
       <div>
       <Router>
